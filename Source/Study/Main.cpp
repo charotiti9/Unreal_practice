@@ -6,6 +6,8 @@
 #include "GameFramework/PlayerController.h"
 //#include "Kismet/GameplayStatics.h"
 #include "Engine/World.h"
+#include "Components/CapsuleComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
 AMain::AMain()
@@ -19,6 +21,9 @@ AMain::AMain()
 	CameraBoom->TargetArmLength = 600.f;
 	CameraBoom->bUsePawnControlRotation = true; // 컨트롤에 따라 springArm을 회전시킨다
 	
+	// 캡슐 콜라이더 사이즈 하드코딩
+	GetCapsuleComponent()->SetCapsuleSize(35.f, 100.f);
+
 	FollowCamera = CreateAbstractDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false; // 컨트롤에 따라 springArm을 회전시키지 않는다
@@ -26,6 +31,19 @@ AMain::AMain()
 	// 카메라 회전
 	BaseTurnRate = 65.f;
 	BaseLookUpRate = 65.f;
+
+	// 카메라 회전 시 컨트롤러도 같이 회전하지 않도록 함
+	bUseControllerRotationYaw = false;
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationRoll = false;
+
+	// 캐릭터가 바라보는 방향을 기준으로 Input을 받는다
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+	GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.f, 0.0f); // 회전속도
+	// 점프
+	GetCharacterMovement()->JumpZVelocity = 650.f;
+	GetCharacterMovement()->AirControl = 0.2f;
+
 }
 
 // Called when the game starts or when spawned
