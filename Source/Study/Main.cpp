@@ -27,7 +27,7 @@ AMain::AMain()
 	FollowCamera = CreateAbstractDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false; // 컨트롤에 따라 springArm을 회전시키지 않는다
-
+	
 	// 카메라 회전
 	BaseTurnRate = 65.f;
 	BaseLookUpRate = 65.f;
